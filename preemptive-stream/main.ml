@@ -48,14 +48,16 @@ end: sig
   (** Shutdown and join the background worker thread *)
 end)
 
-let one () =
+let rec range first last = if first > last then [] else first :: (range (first + 1) last)
+
+(* Create a worker, perform 1000 requests and shut it down *)
+let one_worker () =
   let w = Worker.make (fun () -> ()) in
-  Worker.call w ()
+  Lwt.join (List.map (fun _ -> Worker.call w ()) (range 1 1000))
   >>= fun () ->
   Worker.destroy w
 
+let lots_of_workers () =
+  Lwt.join (List.map (fun _ -> one_worker ()) (range 1 1000))
 
-let test () =
-  one ()
-
-let _ = Lwt_main.run (test ())
+let _ = Lwt_main.run (lots_of_workers ())
