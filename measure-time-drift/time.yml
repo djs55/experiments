@@ -25,6 +25,9 @@ services:
     image: linuxkit/sshd:v0.3
   - name: measure-time
     image: djs55/measure-time:testing
+  - name: poweroff
+    image: linuxkit/poweroff:5740687bf0a6a0480922c0f59b3a4ca77c866cae
+    command: ["/bin/sh", "/poweroff.sh", "30"]
 files:
   - path: root/.ssh/authorized_keys
     source: ~/.ssh/id_rsa.pub
