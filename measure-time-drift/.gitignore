@@ -2,3 +2,6 @@ time-kernel
 time-initrd.img
 time-cmdline
 time-state
+_results
+client/client
+drift.png

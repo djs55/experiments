@@ -1,8 +1,16 @@
-.PHONY: run clean
+.PHONY: run clean graph postprocess
 
 VM:=time-kernel time-initrd.img time-cmdline
 
 build: $(VM) client/client
+
+graph: postprocess
+	./graph.py > _results/graph.gp
+	gnuplot _results/graph.gp
+
+postprocess:
+	mkdir -p _results/postprocessed
+	./postprocess.py _results _results/postprocessed
 
 client/client: client/main.go
 	cd client && go build
@@ -19,3 +27,4 @@ clean:
 	rm -f time-initrd.img
 	rm -f time-cmdline
 	rm -rf time-state
+	rm -rf _results
