@@ -23,6 +23,8 @@ services:
     image: linuxkit/dhcpcd:v0.3
   - name: sshd
     image: linuxkit/sshd:v0.3
+  - name: measure-time
+    image: djs55/measure-time:testing
 files:
   - path: root/.ssh/authorized_keys
     source: ~/.ssh/id_rsa.pub
