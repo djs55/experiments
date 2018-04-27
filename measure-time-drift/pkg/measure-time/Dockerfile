@@ -9,4 +9,6 @@ RUN cd /go/cmd/measure-time && go build
 
 FROM alpine
 COPY --from=build /go/cmd/measure-time/measure-time /measure-time
-CMD ["/measure-time"]
+COPY run.sh /run.sh
+CMD ["/run.sh"]
+LABEL org.mobyproject.config='{"pid": "host", "capabilities": ["CAP_SYS_REBOOT"]}'
