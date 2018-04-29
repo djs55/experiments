@@ -1,0 +1,38 @@
+kernel:
+  image: linuxkit/kernel:4.14.35
+  cmdline: "console=tty0 console=ttyS0 console=ttyAMA0 console=ttysclp0"
+init:
+  - linuxkit/init:d0bf64f4cea42bea71e7d8f8832ba497bb822e89
+  - linuxkit/runc:acba8886e4b1318457c711700f695a02fef9493d
+  - linuxkit/containerd:100d0d046c5061d75ee43e4ac5017a759109cae4
+  - linuxkit/ca-certificates:v0.3
+onboot:
+  - name: sysctl
+    image: linuxkit/sysctl:v0.3
+  - name: rngd1
+    image: linuxkit/rngd:v0.3
+    command: ["/sbin/rngd", "-1"]
+services:
+  - name: getty
+    image: linuxkit/getty:v0.3
+    env:
+     - INSECURE=true
+  - name: rngd
+    image: linuxkit/rngd:v0.3
+  - name: dhcpcd
+    image: linuxkit/dhcpcd:v0.3
+  - name: sshd
+    image: linuxkit/sshd:v0.3
+  - name: measure-time
+    image: djs55/measure-time:testing
+  - name: poweroff
+    image: linuxkit/poweroff:5740687bf0a6a0480922c0f59b3a4ca77c866cae
+    command: ["/bin/sh", "/poweroff.sh", "30"]
+files:
+  - path: root/.ssh/authorized_keys
+    source: ~/.ssh/id_rsa.pub
+    mode: "0600"
+    optional: true
+trust:
+  org:
+    - linuxkit
